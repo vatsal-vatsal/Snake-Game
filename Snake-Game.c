@@ -67,6 +67,7 @@ int main()
 
   while(1)
   {
+
     current=tail;
     while(current!=NULL)
     {
@@ -167,6 +168,8 @@ int main()
     printf("\033[%d;%dH%c",height,width,inputDisplay);
     // system("cls");
 
+    printf("\033[%d;%dH@",appleY,appleX);
+
     current=tail;
     while(current!=NULL)
     {
@@ -219,7 +222,7 @@ int main()
       break;
     }
     printf("\033[%d;%dHScore : %d",height+1,1,score);
-    printf("\033[%d;%dHSleep : %d   ",height+2,1,slep);
+    printf("\033[%d;%dHSpeed : %d   ",height+2,1,140-slep);
 
   }
 
