@@ -21,12 +21,13 @@ int main()
 
   int height=28,width=120,currentLength=5;
   int tempX=1,tempY=1,appleX=1,appleY=1;
-  int score,ateItself=0,speed=120;
+  int score,ateItself=0,changeInputThisFrame=0,slep=100;
   // speed range = (1,199)
-  speed=200-speed;
+  // speed=200-speed;
   score=currentLength;
 
   char input='l',tempInput='l',prevInput='l';
+  char inputDisplay='>';
 
   snake *tail,*current,*temp,*head;
 
@@ -76,14 +77,18 @@ int main()
     if(head->x==appleX && head->y==appleY)
     {
       srand(time(NULL));
-      appleX=1+rand()%(width-1);
-      appleY=1+rand()%(height-1);
+      appleX=1+rand()%(width-2);
+      appleY=1+rand()%(height-2);
       printf("\033[%d;%dH@",appleY,appleX);
       temp=tail;
       tail=(snake*)malloc(sizeof(snake));
       tail->next=temp;
       tail->x=0;
       tail->y=0;
+      if (!(slep<=40))
+      {
+        slep-=20;
+      }
 
       // switch(input)
       // {
@@ -111,30 +116,55 @@ int main()
       score++;
     }
 
-    printf("\033[%d;%dH%d",height,width,score);
-    
-    if(kbhit())
+
+    printf("\033[%d;%dH%c",height,width,inputDisplay);
+    changeInputThisFrame=0;
+    if(kbhit() && changeInputThisFrame==0)
     {
       tempInput=getch();
+      changeInputThisFrame=1;
     }
-    if(tempInput=='l' || tempInput=='j' || tempInput=='i' || tempInput=='k' || tempInput==';')
+    if((tempInput=='l' || tempInput=='j' || tempInput=='i' || tempInput=='k' || tempInput==';'))
     {
-      if(!(tempInput=='l' && prevInput=='j') && !(tempInput=='j' && prevInput=='l') && !(tempInput=='i' && prevInput=='k') && !(tempInput=='k' && prevInput=='i'))
+      if(!(tempInput=='l' && input=='j') && !(tempInput=='j' && input=='l') && !(tempInput=='i' && input=='k') && !(tempInput=='k' && input=='i'))
       {
-        prevInput=input;
+        
         input=tempInput;
       }
     }
 
     if(input=='l' || input=='j')
     {
-      Sleep(speed);
+      Sleep(slep);
     }else{
-      Sleep(speed*2);
+      Sleep(slep*2);
     }
     
+    switch(input)
+    {
+      case 'l':
+        inputDisplay='>';
+        break;
+      
+      case 'j':
+        inputDisplay='<';
+        break;
+      
+      case 'i':
+        inputDisplay='^';
+        break;
+      
+      case 'k':
+        inputDisplay='V';
+        break;
+      case ';':
+        inputDisplay='O';
+        break;
+      default:
+        break;
+    }
     
-    printf("\033[%d;%dH%d",height,width,score);
+    printf("\033[%d;%dH%c",height,width,inputDisplay);
     // system("cls");
 
     current=tail;
@@ -185,12 +215,16 @@ int main()
     }
     if(ateItself==1)
     {
-      printf("\033[%d;%dHU just ate urself XD",height,width);
+      printf("\033[%d;%dHGame Over",height/2,width/2-4);
       break;
     }
+    printf("\033[%d;%dHScore : %d",height+1,1,score);
+    printf("\033[%d;%dHSleep : %d   ",height+2,1,slep);
 
   }
-  getch();
+
+  printf("\033[1;1H");
+  scanf("%d",&width);
   return 0;
 
 }
