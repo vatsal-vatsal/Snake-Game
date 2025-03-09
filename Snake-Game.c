@@ -69,11 +69,12 @@ int main()
   {
 
     current=tail;
-    while(current!=NULL)
+    while(current->next!=NULL)
     {
       printf("\033[%d;%dH*",current->y,current->x);
       current=current->next;
     }
+    printf("\033[%d;%dH%c",current->y,current->x,inputDisplay);
 
     if(head->x==appleX && head->y==appleY)
     {
@@ -86,9 +87,9 @@ int main()
       tail->next=temp;
       tail->x=0;
       tail->y=0;
-      if (!(slep<=40))
+      if (!(slep<=60))
       {
-        slep-=20;
+        slep-=10;
       }
 
       // switch(input)
